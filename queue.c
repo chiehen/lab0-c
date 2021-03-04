@@ -125,6 +125,7 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
     }
     free(val);
     free(ele);
+    q->size--;
     return true;
 }
 
@@ -170,10 +171,8 @@ void q_reverse(queue_t *q)
  */
 void q_sort(queue_t *q)
 {
-    /* TODO: You need to write the code for this function */
-    /* TODO: Remove the above comment when you are about to implement. */
     /* q is NULL or empty*/
-    if (!q || !q->head)
+    if (!q || !q->head || !q->head->next)
         return;
 
     q->head = merge_sort(q->head);
@@ -209,11 +208,16 @@ list_ele_t *merge_sort(list_ele_t *head)
 list_ele_t *merge(list_ele_t *l1, list_ele_t *l2)
 {
     // merge with pseudo node
-    list_ele_t *result = malloc(sizeof(list_ele_t));
-    list_ele_t *result_h = result;
-    if (!result)
-        return l1;  // how to handle ?
-
+    list_ele_t *result;
+    list_ele_t *result_h;
+    if (!l2 || (l1 && strcmp(l1->value, l2->value) < 0)) {
+        result = l1;
+        l1 = l1->next;
+    } else {
+        result = l2;
+        l2 = l2->next;
+    }
+    result_h = result;
     while (l1 && l2) {
         if (strcmp(l1->value, l2->value) < 0) {
             result->next = l1;
@@ -229,7 +233,5 @@ list_ele_t *merge(list_ele_t *l1, list_ele_t *l2)
         result->next = l1;
     if (l2)
         result->next = l2;
-    list_ele_t *head = result_h->next;
-    free(result_h);
-    return head;
+    return result_h;
 }
