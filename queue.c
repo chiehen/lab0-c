@@ -123,6 +123,8 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
             strncpy(sp, val, strlen(val) + 1);
         }
     }
+    if (q->tail == ele)
+        q->tail = NULL;
     free(val);
     free(ele);
     q->size--;
