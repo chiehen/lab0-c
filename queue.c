@@ -150,17 +150,15 @@ int q_size(queue_t *q)
 void q_reverse(queue_t *q)
 {
     if (q && q->head) {
-        list_ele_t *pre = q->head;
-        list_ele_t *curr = pre->next;
-        pre->next = NULL;
+        list_ele_t *curr = q->head->next;
+        q->tail = q->head;
+        q->head->next = NULL;
         while (curr) {
             list_ele_t *n = curr->next;
-            curr->next = pre;
-            pre = curr;
+            curr->next = q->head;
+            q->head = curr;
             curr = n;
         }
-        q->tail = q->head;
-        q->head = pre;
     }
 }
 
